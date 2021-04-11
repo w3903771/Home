@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>mainWindow</class>
- <widget class="QMainWindow" name="mainWindow">
+ <class>child2</class>
+ <widget class="QMainWindow" name="child2">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>智能家居</string>
+   <string>智能门禁</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="frame1">
@@ -40,61 +40,6 @@
      </property>
      <property name="text">
       <string>检测显示窗口</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="TemperatureLable">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>70</y>
-       <width>41</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>温度：</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="SmogLable">
-     <property name="geometry">
-      <rect>
-       <x>230</x>
-       <y>70</y>
-       <width>41</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>烟雾：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="GasLable">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>70</y>
-       <width>41</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>燃气：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="FireLable">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>70</y>
-       <width>41</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>火焰：</string>
      </property>
     </widget>
     <widget class="QLabel" name="NormalImageLable">
@@ -152,114 +97,11 @@
       <string>主人人脸记录</string>
      </property>
     </widget>
-    <widget class="QLabel" name="HumidityLable">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>70</y>
-       <width>41</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>湿度：</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="Temperature">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>70</y>
-       <width>51</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>NULL</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="Humidity">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>70</y>
-       <width>51</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>NULL</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="Smog">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>70</y>
-       <width>51</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>NULL</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="Fire">
-     <property name="geometry">
-      <rect>
-       <x>480</x>
-       <y>70</y>
-       <width>51</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>NULL</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="Gas">
-     <property name="geometry">
-      <rect>
-       <x>380</x>
-       <y>70</y>
-       <width>51</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>NULL</string>
-     </property>
-    </widget>
     <zorder>NormalImageLable</zorder>
     <zorder>label_1</zorder>
     <zorder>stopButton</zorder>
     <zorder>startButton</zorder>
     <zorder>pushButton</zorder>
-    <zorder>TemperatureLable</zorder>
-    <zorder>SmogLable</zorder>
-    <zorder>GasLable</zorder>
-    <zorder>HumidityLable</zorder>
-    <zorder>FireLable</zorder>
-    <zorder>Temperature</zorder>
-    <zorder>Humidity</zorder>
-    <zorder>Smog</zorder>
-    <zorder>Fire</zorder>
-    <zorder>Gas</zorder>
    </widget>
    <widget class="QFrame" name="frame2">
     <property name="geometry">
@@ -281,12 +123,12 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>91</width>
+       <width>131</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>异常显示窗口</string>
+      <string>主人人脸显示窗口</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -294,25 +136,25 @@
       <rect>
        <x>20</x>
        <y>510</y>
-       <width>91</width>
-       <height>21</height>
+       <width>131</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>异常日志：</string>
+      <string>主人人脸记录日志：</string>
      </property>
     </widget>
     <widget class="QPushButton" name="Button_OpenPhoto">
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>160</x>
        <y>680</y>
-       <width>101</width>
+       <width>131</width>
        <height>41</height>
       </rect>
      </property>
      <property name="text">
-      <string>查看异常图片</string>
+      <string>查看主人人脸图片</string>
      </property>
     </widget>
     <widget class="QPlainTextEdit" name="ErrorText">
