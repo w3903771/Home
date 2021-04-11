@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>doorWindow</class>
+ <widget class="QMainWindow" name="doorWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1081</width>
+    <height>812</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>智能门禁</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QFrame" name="frame1">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_1">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>20</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>检测显示窗口</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="NormalFace">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>501</width>
+         <height>551</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="stopButton">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>630</y>
+         <width>131</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>停止检测</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="startButton">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>630</y>
+         <width>131</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>开始检测</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="registButton">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>630</y>
+         <width>131</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>主人人脸记录</string>
+       </property>
+      </widget>
+      <zorder>NormalFace</zorder>
+      <zorder>label_1</zorder>
+      <zorder>stopButton</zorder>
+      <zorder>startButton</zorder>
+      <zorder>registButton</zorder>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame2">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>131</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>异常人脸显示窗口</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>510</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>异常人脸记录：</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="Button_OpenPhoto">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>680</y>
+         <width>131</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>查看异常人脸图片</string>
+       </property>
+      </widget>
+      <widget class="QPlainTextEdit" name="ErrorText">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>530</y>
+         <width>421</width>
+         <height>141</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ErrorFace">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>421</width>
+         <height>441</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1081</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>Button_OpenPhoto</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
