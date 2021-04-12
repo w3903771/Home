@@ -24,13 +24,13 @@ class GetImage:
         self.resource_path = os.path.join(
             self.project_path, "Resources")  # 获取资源文件夹路径
         self.facephoto_path = os.path.join(
-            self.resource_path, "FaceImage")  # 获取人脸图片路径
+            self.resource_path, "../Resources/FaceImage")  # 获取人脸图片路径
         self.ohterphoto_path = os.path.join(
             self.resource_path, "OhterImage")  # 获取其它图片路径
 
         self.path = 'E:\\smart_home\\get_img\\Images'  # 共享文件夹的路径
-        self.rmface_path=os.path.join(self.path,"FaceImage")
-        self.rmother_path = os.path.join(self.path, "OtherImage")
+        self.rmface_path = os.path.join(self.path, "../Resources/FaceImage")
+        self.rmother_path = os.path.join(self.path, "../Resources/OtherImage")
         self.num = 5  # 设定的单位时间取照片数
 
     def getFaceToLocal(self):

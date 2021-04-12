@@ -6,10 +6,12 @@
 # @Contact: qq:1071747983
 #          mail:wuxiaolong8001@163.com
 
-# -*- 功能说明 -*-
+'''# -*- 功能说明 -*-
 
-#调用此类后 根据传入的图片地址与yml训练数据进行识别 返回正常 异常情况判断
+调用此类后 根据传入的图片地址与yml训练数据进行识别 返回正常 异常情况判断
+俩个函数 一个判断是否是人 一个判断是否与yml符合 如不符合 调用文件类 进行储存 再返回结果与路径
 
+'''  # -*- 功能说明 -*-
 import os
 
 # -*- 功能说明 -*-
@@ -18,10 +20,15 @@ import cv2
 
 class Face_Rec:
     def __init__(self):
-        self.
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
-    path=input("请输入训练数据保存路径: ")
-    path=os.path.join(path,"trainer.yml")
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        # recognizer = cv2.face.EigenFaceRecognizer_create()
+        # recognizer = cv2.face.FisherFaceRecognizer_create()
+        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+        self.cvo.load(
+            os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
+
+    path = input("请输入训练数据保存路径: ")
+    path = os.path.join(path, "trainer.yml")
     recognizer.read(path)
     cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
     cvo.load('C:/Anaconda3/envs/tensorflow/Lib/site-packages/cv2/data/haarcascade_frontalface_alt2.xml')
@@ -29,7 +36,7 @@ class Face_Rec:
 
     idnum = 0
 
-    names = [u'吴小龙', 'Bob']
+    names = [u'', ]
 
     cam = cv2.VideoCapture(0)
     minW = 0.1*cam.get(3)

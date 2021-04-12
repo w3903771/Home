@@ -47,7 +47,7 @@ class Face_Trains():
 
     def getImagesAndLabels(self, path):
         '''
-            生成图片标签列表
+            生成图片标签列表 标签默认都为0 只记录一个人
         '''
         imagePaths = [os.path.join(path, f)
                       for f in os.listdir(path)]  # 列表生成式产生图像路径列表
@@ -56,7 +56,7 @@ class Face_Trains():
         for imagePath in imagePaths:
             PIL_img = Image.open(imagePath).convert('L')  # 转为灰度图
             img_numpy = np.array(PIL_img, 'uint8')  # 从PIL图转为numpy数组
-            id = int(os.path.split(imagePath)[-1].split("."))
+            id = 0
             faces = self.cvo.detectMultiScale(img_numpy)
             for (x, y, w, h) in faces:
                 faceSamples.append(img_numpy[y:y + h, x: x + w])
@@ -66,17 +66,21 @@ class Face_Trains():
     '''
         利用photo_path的图片进行训练 
         如果图片数量低于10张 返回错误1
+        否则进行训练生成yml文件 返回0
     '''
     def train(self):
-        if len(os.listdir(self.photo_path))<=10:
+        if len(os.listdir(self.photo_path)) <= 10:
+            os.remove(self.photo_path)  # 清空文件夹
+            os.mkdir(self.photo_path)
             return 1
         else:
             faces, ids = self.getImagesAndLabels(self.photo_path)
             self.recognizer.train(faces, np.array(ids))
-            trainpath = os.path.join(self.train_path, "trainer.yml")
+            trainpath = os.path.join(self.train_path, "faceTrainer.yml")
             self.recognizer.write(trainpath)
-            os.remove(self.photo_path) #删除并重建图片文件夹 不考虑子文件夹
+            os.remove(self.photo_path)  # 清空文件夹
             os.mkdir(self.photo_path)
+            return 0
 
 
 if __name__ == '__main__':
