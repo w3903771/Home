@@ -1,5 +1,7 @@
 <RCC>
   <qresource>
-    <file>../Resources/background.png</file>
+      <file>../Resources/background.png</file>
+      <file>../Resources/FireRecognition.jpg</file>
+      <file>../Resources/Recognition.jpg</file>
   </qresource>
 </RCC>

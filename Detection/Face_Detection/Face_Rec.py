@@ -12,67 +12,66 @@
 俩个函数 一个判断是否是人 一个判断是否与yml符合 如不符合 调用文件类 进行储存 再返回结果与路径
 
 '''  # -*- 功能说明 -*-
+
 import os
 
-# -*- 功能说明 -*-
 import cv2
 
 
 class Face_Rec:
     def __init__(self):
+        self.code_path = os.path.dirname(os.path.abspath(__file__))  # 获取代码路径
+        self.project_path = os.path.dirname(self.code_path)  # 获取识别项目路径
+        self.source_path = os.path.join(
+            self.project_path, "resources")  # 获取依赖数据路径
+        self.train_path = os.path.join(
+            self.project_path,
+            "Trainning result")  # 获取训练数据保存路径
+
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        self.recognizer.read(self.train_path)
         # recognizer = cv2.face.EigenFaceRecognizer_create()
         # recognizer = cv2.face.FisherFaceRecognizer_create()
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
         self.cvo.load(
             os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
 
-    path = input("请输入训练数据保存路径: ")
-    path = os.path.join(path, "trainer.yml")
-    recognizer.read(path)
-    cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
-    cvo.load('C:/Anaconda3/envs/tensorflow/Lib/site-packages/cv2/data/haarcascade_frontalface_alt2.xml')
-    font = cv2.FONT_HERSHEY_SIMPLEX
-
-    idnum = 0
-
-    names = [u'', ]
-
-    cam = cv2.VideoCapture(0)
-    minW = 0.1*cam.get(3)
-    minH = 0.1*cam.get(4)
-
-    while True:
-        ret, img = cam.read()
+    def isperson(self, photo_path):
+        img = cv2.imread(photo_path)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = cvo.detectMultiScale(
+        try:
+            faces = self.cvo.detectMultiScale(
+                gray,
+                scaleFactor=1.3,
+                minNeighbors=5,
+                flags=cv2.CASCADE_SCALE_IMAGE
+            )
+            return True
+        except:
+            return False
+
+    def ishost(self, photo_path):
+        idnum = 0
+        img = cv2.imread(photo_path)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = self.cvo.detectMultiScale(
             gray,
             scaleFactor=1.3,
             minNeighbors=5,
-            minSize=(int(minW), int(minH)),
-            flags = cv2.CASCADE_SCALE_IMAGE
+            flags=cv2.CASCADE_SCALE_IMAGE
         )
-
         for (x, y, w, h) in faces:
-            cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 3)
-            idnum, confidence = recognizer.predict(gray[y:y+h, x:x+w])
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+            idnum, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])
             if confidence < 100:
-                idnum = names[idnum-1]
+                id = 0
                 confidence = "{0}%".format(round(100 - confidence))
             else:
                 idnum = "unknown"
                 confidence = "{0}%".format(round(100 - confidence))
-
-            cv2.putText(img, str(idnum), (x+5, y-5), font, 1, (0, 0, 255), 3)
-            cv2.putText(img, str(confidence), (x+5, y+h-5), font, 1, (0, 0, 255), 3)
-
-        cv2.imshow('Camera', img)
-        k = cv2.waitKey(10)
-        if (cv2.waitKey(1) & 0xFF) == ord('q'):
-            break
-
-    cam.release()
-    cv2.destroyAllWindows()
-
-if __name__ == '__main__':
-    recognize()
+            cv2.putText(img, str(idnum), (x + 5, y - 5), self.font, 1, (0, 0, 255), 3)
+            cv2.putText(img, str(confidence), (x + 5, y + h - 5), self.font, 1, (0, 0, 255), 3)
+            if id == 0:
+                return False
+            else:
+                return True, img

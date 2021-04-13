@@ -9,9 +9,12 @@
 
 import os
 import sys
+import time
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QDialog, QMainWindow
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox
+
+from Detection.Face_Detection import Face_Rec
 
 sys.path.append("..")
 
@@ -24,6 +27,7 @@ class Ui_doorWindow(object):
             self.project_path, "resources")  # 获取依赖数据路径
         self.photo_path = os.path.join(
             self.source_path, "FaceImage")  # 获取人脸文件夹路径
+        self.facerec = Face_Rec()
 
         self.runflag = False  # 循环起始控制变量
 
@@ -110,18 +114,50 @@ class Ui_doorWindow(object):
         self.Button_OpenPhoto.setText(_translate("doorWindow", "查看异常人脸图片"))
 
     def start(self):
-        self.runflag = True  # 开始循环
+        if not self.starttime == 0 and time.time() - self.starttime > 90:  # 距离上次停止识别已经超过90秒
+            self.runflag = True  # 开始循环
+            self.starttime = 0  # 停止识别计时清0
+            self.count = 0  # 人脸检测数清0
+            self.detecttime = 0  # 人脸检测起始时间清0
+        else:
+            QMessageBox.warning(self, "警告", "距离上次开启还不足90秒，请耐心等待")
+        # 考虑到可能多次启动 若共享文件夹为空 需要重新调用 启用树莓派程序
+        # 调用文件处理函数 开始放图片到resources内
+
         while self.runflag:
             if not os.listdir(self.photo_path) == 0:
                 imagePaths = [os.path.join(self.photo_path, f)
                               for f in os.listdir(self.photo_path)]  # 列表生成式产生图像路径列表
                 for imagePath in imagePaths:
-                    pass
+                    pic = self.QPixmap(imagePath)
+                    self.NormalFace.setPixmap(pic)  # 显示该图片
+                    isperson = self.facerec.isperson(imagePath)
+                    if isperson:
+                        flag, img = self.facerec.ishost(imagePath)  # flag为真表示不是主人 此时img返回识别的人脸图片
+                        if flag:
+                            if not self.detecttime == 0:  # 起始时间未记录则记录开始检测到人脸的时间
+                                self.detecttime = time.time()
+                            self.count += 1
+                        if time.time() - self.detecttime > 120 and self.count > 20:  # 停留时间超过2分钟 识别次数超过20次 记录为异常
+                            # 调用文件处理 存储异常图片 返回文件路径
+                            # 调用文件处理 返回要记录的日志文本 同时在外部log文件追加内容
+                            self.count = 0
+                            self.detecttime = 0
+                            wrongImagePath = 1  # 储存的异常图片路径 待完善
+                            pic2 = self.QPixmap(wrongImagePath)
+                            self.ErrorFace.setPixmap(pic)  # 显示异常人脸图片
+                            logtext = 1  # 要插入的日志文本内容 待完善
+                            self.ErrorText.appendPlainText(logtext)  # 插入日志
+                        elif time.time() - self.detecttime > 180 and self.count < 5:  # 无人或正常人经过 记录清空
+                            self.count = 0
+                            self.detecttime = 0
 
     def stop(self):
-        self.runflag = False
-        # 发送树莓派终止信号
-
+        replay = QMessageBox.question(self, "", "确认停止嘛，下次开启需间隔90秒", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if replay == QMessageBox.Yes:
+            self.runflag = False
+            self.starttime = time.time()  # 记录关闭时的系统时间
+            #清空共享文件夹 1分半内不允许再次开启
 
 class doorWindow(QMainWindow):
     def __init__(self):

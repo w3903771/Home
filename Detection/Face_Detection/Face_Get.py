@@ -8,12 +8,15 @@
 
 # -*- 功能说明 -*-
 
-# 由人类采集窗口调用 仅用于采集主人人脸
+# 由人类采集窗口在检测端调用 仅用于采集主人人脸
+
+# -*- 功能说明 -*-
 
 import os
 
-# -*- 功能说明 -*-
 import cv2
+
+from . import Face_Trains
 
 
 class Face_Get:
@@ -21,6 +24,7 @@ class Face_Get:
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
         self.cvo.load(
             os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
+        self.train = Face_Trains()
 
         self.code_path = os.path.dirname(os.path.abspath(__file__))  # 获取代码路径
         self.project_path = os.path.dirname(self.code_path)  # 获取识别项目路径
@@ -28,6 +32,7 @@ class Face_Get:
             self.project_path, "resources")  # 获取依赖数据路径
         self.photo_path = os.path.join(
             self.source_path, "face_trainning_images")  # 获取图片保存路径
+
 
         self.cam = cv2.VideoCapture(0)
         self.count = 0
@@ -52,10 +57,18 @@ class Face_Get:
                     # 调整图像大小
                     new_frame = cv2.resize(img[y:y + h, x:x + w], (100, 140))
                     self.count += 1
-                    path = os.path.join(self.photo_path, '%s.jpg' % (self.count))
+                    path = os.path.join(
+                        self.photo_path, '%s.jpg' %
+                                         (self.count))
                     # 保存图像
                     cv2.imwrite(path, new_frame)
-            if self.count >= 30:  # 得到1000个样本后退出摄像
+            if self.count >= 30:  # 得到30个样本后退出摄像
                 break
         self.cam.release()
         cv2.destroyAllWindows()
+
+        flag = self.train.train()
+        if flag == 1:  # 图片训练异常 弹出异常提示
+            pass
+        elif flag == 0:  # 图片训练完成 退出
+            return 0
