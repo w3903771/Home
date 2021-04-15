@@ -15,7 +15,7 @@
 
 import os
 
-import cv2
+from cv2 import cv2
 
 
 class Face_Rec:
@@ -23,10 +23,10 @@ class Face_Rec:
         self.code_path = os.path.dirname(os.path.abspath(__file__))  # 获取代码路径
         self.project_path = os.path.dirname(self.code_path)  # 获取识别项目路径
         self.source_path = os.path.join(
-            self.project_path, "resources")  # 获取依赖数据路径
+            self.project_path, "Trainning result")  # 获取依赖数据路径
         self.train_path = os.path.join(
-            self.project_path,
-            "Trainning result")  # 获取训练数据保存路径
+            self.source_path,
+            "faceTrainer.yml")  # 获取训练数据保存路径
 
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         self.recognizer.read(self.train_path)
@@ -75,3 +75,7 @@ class Face_Rec:
                 return False
             else:
                 return True, img
+
+
+if __name__ == "__main__":
+    a = Face_Rec()

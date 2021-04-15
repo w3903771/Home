@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>imageCollect</class>
+    <widget class="QMainWindow" name="imageCollect">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>558</width>
+                <height>647</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>智能门禁</string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <widget class="QLabel" name="label">
+                <property name="geometry">
+                    <rect>
+                        <x>50</x>
+                        <y>30</y>
+                        <width>451</width>
+                        <height>481</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                </property>
+                <property name="text">
+                    <string/>
+                </property>
+            </widget>
+            <widget class="QPushButton" name="startButton">
+                <property name="geometry">
+                    <rect>
+                        <x>200</x>
+                        <y>530</y>
+                        <width>161</width>
+                        <height>51</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>开始检测</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QMenuBar" name="menubar">
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>558</width>
+                    <height>26</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QStatusBar" name="statusbar"/>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

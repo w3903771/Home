@@ -3,34 +3,38 @@
  <class>doorWindow</class>
  <widget class="QMainWindow" name="doorWindow">
   <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1081</width>
-    <height>812</height>
-   </rect>
+      <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1081</width>
+          <height>812</height>
+      </rect>
   </property>
-  <property name="windowTitle">
-   <string>智能门禁</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QFrame" name="frame1">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
+     <property name="windowTitle">
+         <string>智能门禁</string>
+     </property>
+     <property name="styleSheet">
+         <string notr="true">#doorWindow{border-image: url(:/Resources/Recognition.jpg);}
+         </string>
+     </property>
+     <widget class="QWidget" name="centralwidget">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+                 <widget class="QFrame" name="frame1">
+                     <property name="frameShape">
+                         <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                     </property>
       <widget class="QLabel" name="label_1">
        <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>20</y>
-         <width>121</width>
-         <height>31</height>
-        </rect>
+           <rect>
+               <x>20</x>
+               <y>10</y>
+               <width>121</width>
+               <height>31</height>
+           </rect>
        </property>
        <property name="text">
         <string>检测显示窗口</string>
@@ -40,7 +44,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>60</y>
+            <y>50</y>
          <width>501</width>
          <height>551</height>
         </rect>
@@ -145,16 +149,22 @@
         <string>查看异常人脸图片</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="ErrorText">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>530</y>
-         <width>421</width>
-         <height>141</height>
-        </rect>
-       </property>
-      </widget>
+         <widget class="QPlainTextEdit" name="ErrorText">
+             <property name="geometry">
+                 <rect>
+                     <x>10</x>
+                     <y>530</y>
+                     <width>421</width>
+                     <height>141</height>
+                 </rect>
+             </property>
+             <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255,0);</string>
+             </property>
+             <property name="backgroundVisible">
+                 <bool>false</bool>
+             </property>
+         </widget>
       <widget class="QLabel" name="ErrorFace">
        <property name="geometry">
         <rect>
@@ -183,16 +193,18 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1081</width>
-     <height>26</height>
+        <width>1081</width>
+        <height>26</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+     <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <tabstops>
-  <tabstop>Button_OpenPhoto</tabstop>
- </tabstops>
- <resources/>
- <connections/>
+    <tabstops>
+        <tabstop>Button_OpenPhoto</tabstop>
+    </tabstops>
+    <resources>
+        <include location="resource_qrc.qrc"/>
+    </resources>
+    <connections/>
 </ui>
