@@ -14,7 +14,7 @@
 import paramiko
 
 
-class SHH:
+class SSH:
     def __init__(self):
         # 输入用户名、密码、ip等
         self.ip = "192.168.137.69"
@@ -29,7 +29,7 @@ class SHH:
     def run(self, command):
         # 建立连接
         self.ssh.connect(self.ip, self.port, self.user, self.password, timeout=10)
-        stdin, stdout, stderr = self.ssh.exec_command(command)
+        stdin, stdout, stderr = self.ssh.exec_command('cd /home/pi/code' + ';' + command)
         err_list = stderr.readlines()
         if len(err_list) > 0:
             for err_content in err_list:
@@ -41,26 +41,10 @@ class SHH:
         self.ssh.close()
 
     def clear(self):
-        # 建立连接
-        self.ssh.connect(self.ip, self.port, self.user, self.password, timeout=10)
-        command1 = 'rm -f ' + self.remotepath  # 清空共享文件夹
-        command2 = 'mkdir' + self.remotepath  # 重建文件夹
-        command3 = 'mkdir ' + self.remotepath + '\faceImage'
-        command4 = 'mkdir ' + self.remotepath + '\otherImage'
-        command = []
-        command.append(command1)
-        command.append(command2)
-        command.append(command3)
-        command.append(command4)
-        for i in range(1, 5):
-            stdin, stdout, stderr = self.ssh.exec_command(command[i])
-            # 输出命令执行结果
-            err_list = stderr.readlines()
-            if len(err_list) > 0:
-                for err_content in err_list:
-                    print('ERROR:' + err_content)
-                exit()
-            for item in stdout:
-                print(item)
-        # 关闭连接
-        self.ssh.close()
+        self.run('sudo sh clear.sh')
+
+
+if __name__ == "__main__":
+    ssh = SSH()
+    ssh.run('ls')
+    ssh.run('sudo sh clear.sh')
