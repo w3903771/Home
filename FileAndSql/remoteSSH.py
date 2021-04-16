@@ -1,7 +1,7 @@
 # -*- codeing = utf-8 -*-
 # @Time : 2021-04-15 16:25
 # @Author : cAMP-Cascade-DNN
-# @File : remoteSHH.py
+# @File : remoteSSH.py
 # @Software : Pycharm
 # @Contact: qq:1071747983
 #          mail:wuxiaolong8001@163.com
@@ -40,9 +40,20 @@ class SSH:
         # 关闭连接
         self.ssh.close()
 
+    def startFace(self):
+        self.run('sudo sh runFace.sh')
+
+    def startOther(self):
+        self.run('sudo sh runOther.sh')
+
     def clear(self):
         self.run('sudo sh clear.sh')
 
+    def clearFace(self):
+        self.run('sudo sh clearFace.sh')
+
+    def clearOther(self):
+        self.run('sudo sh clearOther.sh')
 
 if __name__ == "__main__":
     ssh = SSH()

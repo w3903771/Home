@@ -14,7 +14,7 @@ import cv2
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow
 
-from Detection.Face_Detection import Face_Trains
+from Detection.Face_Detection.Face_Trains import Face_Trains
 
 sys.path.append("..")
 
@@ -35,7 +35,7 @@ class Ui_imageCollect(object):
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
         self.cvo.load(
             os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
-        self.train = Face_Trains()
+        self.train = Face_Trains
 
     def setupUi(self, imageCollect):
         imageCollect.setObjectName("imageCollect")
