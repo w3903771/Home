@@ -17,6 +17,7 @@
 # -*- 功能说明 -*-
 
 import os
+import shutil
 
 import cv2
 import numpy as np
@@ -70,7 +71,7 @@ class Face_Trains():
     '''
     def train(self):
         if len(os.listdir(self.photo_path)) <= 10:
-            os.remove(self.photo_path)  # 清空文件夹
+            shutil.rmtree(self.photo_path)  # 清空文件夹
             os.mkdir(self.photo_path)
             return 1
         else:
@@ -78,7 +79,7 @@ class Face_Trains():
             self.recognizer.train(faces, np.array(ids))
             trainpath = os.path.join(self.train_path, "faceTrainer.yml")
             self.recognizer.write(trainpath)
-            os.remove(self.photo_path)  # 清空文件夹
+            shutil.rmtree(self.photo_path)  # 清空文件夹
             os.mkdir(self.photo_path)
             return 0
 

@@ -57,5 +57,6 @@ class SSH:
 
 if __name__ == "__main__":
     ssh = SSH()
-    ssh.run('ls')
-    ssh.run('sudo sh clear.sh')
+    ssh.clearFace()
+    # ssh.startFace()
+    exit(1)

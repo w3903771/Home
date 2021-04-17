@@ -12,6 +12,7 @@ import sys
 
 import cv2
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QDialog, QMainWindow
 
 from Detection.Face_Detection.Face_Trains import Face_Trains
@@ -23,7 +24,7 @@ class Ui_imageCollect(object):
     def __init__(self):
 
         self.windows_path = os.path.dirname(
-            os.path.abspath(__file__))  # 获取文件夹路径\\192.168.137.69\pi\share
+            os.path.abspath(__file__))
         self.project_path = os.path.dirname(self.windows_path)  # 获取识别项目路径
         self.detection_path = os.path.join(
             self.project_path, "Detection")  # 获取依赖数据路径
@@ -31,11 +32,11 @@ class Ui_imageCollect(object):
             self.detection_path, "resources")
         self.photo_path = os.path.join(
             self.source_path, "face_trainning_images")  # 获取图片保存路径
-
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
         self.cvo.load(
             os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
-        self.train = Face_Trains
+
+        self.train = Face_Trains()
 
     def setupUi(self, imageCollect):
         imageCollect.setObjectName("imageCollect")
@@ -71,12 +72,15 @@ class Ui_imageCollect(object):
         self.startButton.setText(_translate("imageCollect", "开始检测"))
 
     def start(self):
-        cam = cv2.VideoCapture(0)
-        count = 0
-        fpsc = 0
-        while True:
+        self.cam = cv2.VideoCapture(0)
+        self.count = 0
+        self.fpsc = 0
+        while self.cam.isOpened():
             # 从摄像头读取图片
             sucess, img = self.cam.read()
+            self.fpsc += 1
+            height, width, bytesPerComponent = img.shape
+            bytesPerLine = bytesPerComponent * width
             # 转为灰度图片
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             # 检测人脸
@@ -87,25 +91,34 @@ class Ui_imageCollect(object):
                 flags=cv2.CASCADE_SCALE_IMAGE
             )
             for (x, y, w, h) in faces:
-                if (self.fpsc % 2 == 0):
-                    # 调整图像大小
-                    new_frame = cv2.resize(img[y:y + h, x:x + w], (100, 140))
+                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255,), 2)
+                show = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # 视频色彩转换回RGB，这样才是现实的颜色
+                showImage = QImage(show.data, width, height, bytesPerLine, QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
+                self.label.setPixmap(QPixmap.fromImage(showImage).scaled(self.label.width(),
+                                                                         self.label.height()))  # 往显示视频的Label里 显示QImage
+                # 调整图像大小
+                new_frame = cv2.resize(img[y:y + h, x:x + w], (120, 160))
+                if self.fpsc % 3 == 0:
                     self.count += 1
                     path = os.path.join(
                         self.photo_path, '%s.jpg' %
                                          (self.count))
                     # 保存图像
                     cv2.imwrite(path, new_frame)
+            if (cv2.waitKey(1) & 0xFF) == ord('q'):
+                break
             if self.count >= 30:  # 得到30个样本后退出摄像
+                self.label.clear()
+                self.startButton.setEnabled(False)
+                self.startButton.setText("采集完毕...训练中")
                 break
         self.cam.release()
         cv2.destroyAllWindows()
-
         flag = self.train.train()
         if flag == 1:  # 图片训练异常 弹出异常提示
-            pass
+            self.startButton.setText("训练失败，请重新采集训练")
         elif flag == 0:  # 图片训练完成 退出
-            return 0
+            self.startButton.setText("训练完成，请关闭窗口")
 
 
 class imageCollect(QMainWindow):
@@ -113,3 +126,8 @@ class imageCollect(QMainWindow):
         QDialog.__init__(self)
         self.child = Ui_imageCollect()
         self.child.setupUi(self)
+
+
+if __name__ == "__main__":
+    win = imageCollect()
+    win.show()

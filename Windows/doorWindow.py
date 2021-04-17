@@ -11,11 +11,12 @@ import sys
 import time
 
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox
 
-import imageCollect
 from Detection.Face_Detection.Face_Rec import *
 from FileAndSql.remoteSSH import SSH
+from imageCollect import imageCollect
 
 sys.path.append("..")
 
@@ -31,7 +32,6 @@ class Ui_doorWindow(object):
             self.source_path, "FaceImage")  # 获取人脸文件夹路径
         self.facerec = Face_Rec()
 
-        self.imageget = imageCollect.imageCollect()
         self.ssh = SSH()
         self.runflag = False  # 循环起始控制变量
         self.starttime = 0  # 重复启用计时清0
@@ -145,7 +145,7 @@ class Ui_doorWindow(object):
                 imagePaths = [os.path.join(self.photo_path, f)
                               for f in os.listdir(self.photo_path)]  # 列表生成式产生图像路径列表
                 for imagePath in imagePaths:
-                    pic = self.QPixmap(imagePath)
+                    pic = QPixmap(imagePath)
                     self.NormalFace.setPixmap(pic)  # 显示该图片
                     isperson = self.facerec.isperson(imagePath)
                     if isperson:
@@ -160,7 +160,7 @@ class Ui_doorWindow(object):
                             self.count = 0
                             self.detecttime = 0
                             wrongImagePath = 1  # 储存的异常图片路径 待完善
-                            pic2 = self.QPixmap(wrongImagePath)
+                            pic2 = QPixmap(wrongImagePath)
                             self.ErrorFace.setPixmap(pic)  # 显示异常人脸图片
                             logtext = 1  # 要插入的日志文本内容 待完善
                             self.ErrorText.appendPlainText(logtext)  # 插入日志
@@ -178,7 +178,8 @@ class Ui_doorWindow(object):
         self.stopButton.setEnabled(False)
 
     def collect(self):
-        self.collect().show()
+        self.imageget = imageCollect()
+        self.imageget.show()
 
 
 class doorWindow(QMainWindow):
