@@ -39,16 +39,16 @@ class Face_Rec:
     def isperson(self, photo_path):
         img = cv2.imread(photo_path)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        try:
-            faces = self.cvo.detectMultiScale(
-                gray,
-                scaleFactor=1.3,
-                minNeighbors=5,
-                flags=cv2.CASCADE_SCALE_IMAGE
-            )
-            return True
-        except:
-            return False
+        faces = self.cvo.detectMultiScale(
+            gray,
+            scaleFactor=1.3,
+            minNeighbors=5,
+            flags=cv2.CASCADE_SCALE_IMAGE
+        )
+        if faces == []:
+            return 0
+        else:
+            return 1
 
     def ishost(self, photo_path):
         idnum = 0

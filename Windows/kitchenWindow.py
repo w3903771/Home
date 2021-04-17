@@ -19,7 +19,7 @@ class Ui_kitchenWindow(object):
     def setupUi(self, kitchenWindow):
         kitchenWindow.setObjectName("kitchenWindow")
         kitchenWindow.resize(1081, 812)
-        kitchenWindow.setStyleSheet("#kitchenWindow{border-image: url(:/Resources/FireRecognition.jpg);}")
+        kitchenWindow.setStyleSheet("#kitchenWindow{\n""border-image: url(:/Resources/background.png);\n""}\n""")
         self.centralwidget = QtWidgets.QWidget(kitchenWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame2 = QtWidgets.QFrame(self.centralwidget)

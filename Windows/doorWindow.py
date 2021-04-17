@@ -39,7 +39,7 @@ class Ui_doorWindow(object):
     def setupUi(self, doorWindow):
         doorWindow.setObjectName("doorWindow")
         doorWindow.resize(1081, 812)
-        doorWindow.setStyleSheet(" #doorWindow{border-image: url(:/Resources/Recognition.jpg);}\n""")
+        doorWindow.setStyleSheet(" #doorWindow{\n""border-image: url(:/Resources/background.png);\n""}\n""")
         self.centralwidget = QtWidgets.QWidget(doorWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
