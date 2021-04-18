@@ -102,7 +102,7 @@ class Ui_imageCollect(object):
                     self.count += 1
                     path = os.path.join(
                         self.photo_path, '%s.jpg' %
-                                         (self.count))
+                                         self.count)
                     # 保存图像
                     cv2.imwrite(path, new_frame)
             if (cv2.waitKey(1) & 0xFF) == ord('q'):

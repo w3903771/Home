@@ -46,6 +46,12 @@ class SSH:
     def startOther(self):
         self.run('sudo sh runOther.sh')
 
+    def stopFace(self):
+        self.run('sudo sh flag1.sh')
+
+    def stopOther(self):
+        self.run('sudo sh flag2.sh')
+
     def clear(self):
         self.run('sudo sh clear.sh')
 
@@ -57,6 +63,6 @@ class SSH:
 
 if __name__ == "__main__":
     ssh = SSH()
-    ssh.clearFace()
+    ssh.stopOther()
     # ssh.startFace()
     exit(1)
