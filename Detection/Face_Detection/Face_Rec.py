@@ -35,12 +35,16 @@ class Face_Rec:
         self.recognizer.read(self.train_path)
         # recognizer = cv2.face.EigenFaceRecognizer_create()
         # recognizer = cv2.face.FisherFaceRecognizer_create()
-        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
         self.cvo.load(
-            os.path.join(self.person_source_path, 'haarcascade_frontalface_alt2.xml'))
+            os.path.join(self.person_source_path, 'haarcascade_frontalface_alt.xml'))
 
     def isPerson(self, img):
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        try:
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        except:
+            print('error')
+            return 0
         faces = self.cvo.detectMultiScale(
             gray,
             scaleFactor=1.3,
@@ -63,10 +67,10 @@ class Face_Rec:
         for (x, y, w, h) in faces:
             cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
             idnum, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])  # 生成预测id与置信度 对于LBPH 置信度应低于50
-            if confidence <= 50:
+            if confidence <= 100:
                 id = "Host"
                 confidence = "{0}%".format(round(100 - confidence))
-            elif confidence >= 80:
+            else:
                 id = "Stranger"
                 confidence = "{0}%".format(round(100 - confidence))
             cv2.putText(img, str(id), (x + 5, y - 5), self.font, 1, (0, 0, 255), 3)

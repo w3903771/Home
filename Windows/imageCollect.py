@@ -32,9 +32,9 @@ class Ui_imageCollect(object):
             self.detection_path, "resources")
         self.photo_path = os.path.join(
             self.source_path, "face_trainning_images")  # 获取图片保存路径
-        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
         self.cvo.load(
-            os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
+            os.path.join(self.source_path, 'haarcascade_frontalface_alt.xml'))
 
         self.train = Face_Trains()
 
@@ -97,7 +97,7 @@ class Ui_imageCollect(object):
                 self.label.setPixmap(QPixmap.fromImage(showImage).scaled(self.label.width(),
                                                                          self.label.height()))  # 往显示视频的Label里 显示QImage
                 # 调整图像大小
-                new_frame = cv2.resize(img[y:y + h, x:x + w], (120, 160))
+                new_frame = cv2.resize(img[y:y + h, x:x + w], (160, 240))
                 if self.fpsc % 3 == 0:
                     self.count += 1
                     path = os.path.join(

@@ -30,14 +30,14 @@ class SSH:
         # 建立连接
         self.ssh.connect(self.ip, self.port, self.user, self.password, timeout=10)
         stdin, stdout, stderr = self.ssh.exec_command('cd /home/pi/code' + ';' + command)
-        err_list = stderr.readlines()
-        if len(err_list) > 0:
-            for err_content in err_list:
-                print('ERROR:' + err_content)
-            exit()
-        for item in stdout:
-            print(item)
-        # 关闭连接
+        # err_list = stderr.readlines()
+        # if len(err_list) > 0:
+        #     for err_content in err_list:
+        #         print('ERROR:' + err_content)
+        #     exit()
+        # for item in stdout:
+        #     print(item)
+        # # 关闭连接
         self.ssh.close()
 
     def startFace(self):

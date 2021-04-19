@@ -17,8 +17,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 
 import doorWindow as dw
 import kitchenWindow as kw
-from FileAndSql.remoteSSH import SSH
-
+import resource_qrc_rc
 
 class Ui_mainWindow(object):
 
@@ -26,11 +25,11 @@ class Ui_mainWindow(object):
         self.doorWindow = dw.doorWindow()
         self.kitchenWindow = kw.kitchenWindow()
 
-        self.ssh = SSH()
-        self.ssh.stopFace()
-        self.ssh.stopOther()
+        # self.ssh = SSH()
+        # self.ssh.stopFace()
+        # self.ssh.stopOther()
         time.sleep(1)
-        self.ssh.clear()
+        # self.ssh.clear()
 
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")

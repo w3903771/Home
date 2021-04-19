@@ -42,9 +42,9 @@ class Face_Trains():
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         # recognizer = cv2.face.EigenFaceRecognizer_create()
         # recognizer = cv2.face.FisherFaceRecognizer_create()
-        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt2.xml')
+        self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
         self.cvo.load(
-            os.path.join(self.source_path, 'haarcascade_frontalface_alt2.xml'))
+            os.path.join(self.source_path, 'haarcascade_frontalface_alt.xml'))
 
     def getImagesAndLabels(self, path):
         '''

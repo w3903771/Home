@@ -13,13 +13,14 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow
 
 sys.path.append("..")
-
+import resource_qrc_rc
 
 class Ui_kitchenWindow(object):
+
     def setupUi(self, kitchenWindow):
         kitchenWindow.setObjectName("kitchenWindow")
         kitchenWindow.resize(1081, 812)
-        kitchenWindow.setStyleSheet("#kitchenWindow{border-image: url(:/Resources/background.png);\n""}\n""")
+        kitchenWindow.setStyleSheet("#kitchenWindow{border-image: url(:/Resources/background.png);}\n""")
         self.centralwidget = QtWidgets.QWidget(kitchenWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame2 = QtWidgets.QFrame(self.centralwidget)
@@ -145,6 +146,7 @@ class Ui_kitchenWindow(object):
         self.Smog.setText(_translate("kitchenWindow", "NULL"))
         self.Fire.setText(_translate("kitchenWindow", "NULL"))
         self.Gas.setText(_translate("kitchenWindow", "NULL"))
+
 
 class kitchenWindow(QMainWindow):
     def __init__(self):
