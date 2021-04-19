@@ -20,6 +20,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox
 
 from Detection.Face_Detection.Face_Rec import *
+from FileAndSql.remoteSSH import SSH
 from imageCollect import imageCollect
 import resource_qrc_rc
 
@@ -201,7 +202,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_doorWindow):  # 确保window为qtwidg
         self.photo_path = r'\\192.168.137.69\pi\share\faceImage'
         self.facerec = Face_Rec()
 
-        # self.ssh = SSH()
+        self.ssh = SSH()
         self.runflag = False  # 循环起始控制变量
 
         self.timer = QTimer()

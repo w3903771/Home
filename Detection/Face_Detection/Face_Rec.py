@@ -47,9 +47,8 @@ class Face_Rec:
             return 0
         faces = self.cvo.detectMultiScale(
             gray,
-            scaleFactor=1.3,
-            minNeighbors=5,
-            flags=cv2.CASCADE_SCALE_IMAGE
+            scaleFactor=1.1,
+            minNeighbors=3,
         )
         if faces == ():  # 人脸坐标为空 即未检测到有人的存在
             return 0
@@ -60,8 +59,8 @@ class Face_Rec:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = self.cvo.detectMultiScale(
             gray,
-            scaleFactor=1.3,
-            minNeighbors=5,
+            scaleFactor=1.1,
+            minNeighbors=3,
             flags=cv2.CASCADE_SCALE_IMAGE
         )
         for (x, y, w, h) in faces:

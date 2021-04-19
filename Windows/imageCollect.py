@@ -72,6 +72,8 @@ class Ui_imageCollect(object):
         self.startButton.setText(_translate("imageCollect", "开始检测"))
 
     def start(self):
+        self.startButton.setEnabled(False)
+        self.startButton.setText("采集中...请耐心等待")
         self.cam = cv2.VideoCapture(0)
         self.count = 0
         self.fpsc = 0
@@ -86,18 +88,17 @@ class Ui_imageCollect(object):
             # 检测人脸
             faces = self.cvo.detectMultiScale(
                 gray,  # 灰度图片
-                scaleFactor=1.3,  # 补偿参数
-                minNeighbors=5,  # 物体数
-                flags=cv2.CASCADE_SCALE_IMAGE
+                scaleFactor=1.1,  # 补偿参数
+                minNeighbors=4,  # 物体数
             )
             for (x, y, w, h) in faces:
-                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255,), 2)
+                # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255,), 2)
                 show = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # 视频色彩转换回RGB，这样才是现实的颜色
                 showImage = QImage(show.data, width, height, bytesPerLine, QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
                 self.label.setPixmap(QPixmap.fromImage(showImage).scaled(self.label.width(),
                                                                          self.label.height()))  # 往显示视频的Label里 显示QImage
                 # 调整图像大小
-                new_frame = cv2.resize(img[y:y + h, x:x + w], (160, 240))
+                new_frame = cv2.resize(img[y - 3:y + h + 3, x - 3:x + w + 3], (200, 200))
                 if self.fpsc % 3 == 0:
                     self.count += 1
                     path = os.path.join(
@@ -107,7 +108,7 @@ class Ui_imageCollect(object):
                     cv2.imwrite(path, new_frame)
             if (cv2.waitKey(1) & 0xFF) == ord('q'):
                 break
-            if self.count >= 30:  # 得到30个样本后退出摄像
+            if self.count >= 150:  # 得到30个样本后退出摄像
                 self.label.clear()
                 self.startButton.setEnabled(False)
                 self.startButton.setText("采集完毕...训练中")

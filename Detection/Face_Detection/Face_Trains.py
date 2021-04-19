@@ -79,8 +79,8 @@ class Face_Trains():
             self.recognizer.train(faces, np.array(ids))
             trainpath = os.path.join(self.train_path, "faceTrainer.yml")
             self.recognizer.write(trainpath)
-            shutil.rmtree(self.photo_path)  # 清空文件夹
-            os.mkdir(self.photo_path)
+            # shutil.rmtree(self.photo_path)  # 清空文件夹
+            # os.mkdir(self.photo_path)
             return 0
 
 
