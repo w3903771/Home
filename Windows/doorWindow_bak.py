@@ -15,18 +15,14 @@ sys.path.append("..")
 import time
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QObject, QThread, QTimer, pyqtSignal
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMessageBox
 
 from Detection.Face_Detection.Face_Rec import *
 from FileAndSql.remoteSSH import SSH
-from FileAndSql.fileAndLog import fileAndLog
 from imageCollect import imageCollect
 import resource_qrc_rc
-
-count = 0  # 人脸检测数清0
-detecttime = 0  # 人脸检测起始时间清0
 
 
 class Ui_doorWindow(object):
@@ -194,20 +190,6 @@ class Ui_doorWindow(object):
         self.Button_OpenPhoto.setText(_translate("doorWindow", "查看异常人脸记录"))
 
 
-class MyThread(QObject):
-    startsig = pyqtSignal(int)
-    endsig = pyqtSignal(int, int)
-
-    def __init__(self):
-        super(MyThread, self).__init__()
-        self.facerec = Face_Rec()
-
-    def work(self, f):
-        if f == 1:
-            global img2
-            flag, ishost, img2 = self.facerec.isHost(img1)
-            self.endsig.emit(flag, ishost)
-
 class MainWindow(QtWidgets.QMainWindow, Ui_doorWindow):  # 确保window为qtwidgets 不然massagebox无法启用
 
     def __init__(self, *args, **kwargs):
@@ -216,79 +198,73 @@ class MainWindow(QtWidgets.QMainWindow, Ui_doorWindow):  # 确保window为qtwidg
         self.code_path = os.path.dirname(os.path.abspath(__file__))  # 获取代码路径
         self.project_path = os.path.dirname(self.code_path)  # 获取识别项目路径
         self.source_path = os.path.join(
-            self.project_path, "Resources")  # 获取依赖数据路径
+            self.project_path, "resources")  # 获取依赖数据路径
         self.photo_path = r'\\192.168.137.69\pi\share\faceImage'
-
-        self.thread = QThread()
-        self.myThread = MyThread()
-        self.myThread.moveToThread(self.thread)
-        self.myThread.startsig.connect(self.myThread.work)
-        self.myThread.endsig.connect(self.update)
-        self.thread.start()
+        self.facerec = Face_Rec()
 
         self.ssh = SSH()
-        self.log = fileAndLog()
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.run)
+        self.runflag = False  # 循环起始控制变量
 
-    def run(self):
-        if len(os.listdir(self.photo_path)) == 1:
-            imagePath = os.path.join(self.photo_path, r'1.jpg')
-            global img1
-            img1 = cv2.imread(imagePath)
-            height, width, bytesPerComponent = img1.shape
-            bytesPerLine = bytesPerComponent * width
-            show = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)  # 视频色彩转换回RGB，这样才是现实的颜色
-            showImage = QImage(show.data, width, height, bytesPerLine,
-                               QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
-            self.NormalFace.setPixmap(
-                QPixmap.fromImage(showImage).scaled(493, 572))
-            QApplication.processEvents()
-            self.myThread.startsig.emit(1)
-            os.remove(imagePath)
+        self.timer = QTimer()
 
     def start(self):
-
+        self.runflag = True  # 开始循环
+        self.count = 0  # 人脸检测数清0
+        self.detecttime = 0  # 人脸检测起始时间清0
         self.startButton.setEnabled(False)  # 禁止重复开始
         self.stopButton.setEnabled(True)
         self.ssh.startFace()
-        self.timer.start(100)
+        time.sleep(0.5)
+        print(1)
+        self.timer.timeout.connect(self.detect)
+        self.timer.start(300)
 
-    def update(self, flag, ishost):
-        global detecttime, count
-        if flag:
-            height, width, bytesPerComponent = img2.shape
-            bytesPerLine = bytesPerComponent * width
-            show = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)  # 视频色彩转换回RGB，这样才是现实的颜色
-            showImage = QImage(show.data, width, height, bytesPerLine,
-                               QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
-            self.ErrorFace.setPixmap(
-                QPixmap.fromImage(showImage).scaled(466, 298))
-        QApplication.processEvents()
-        if flag and ishost:
-            print(time.time() - detecttime, count)
-            if detecttime == 0:  # 起始时间未记录则记录开始检测到人脸的时间
-                detecttime = time.time()
-            count = count + 1
-            if time.time() - detecttime > 120 and count > 30:  # 停留时间超过2分钟 识别次数超过20次 记录为异常
-                count = 0
-                detecttime = 0
-                logtext = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                logtext += " 图像检测发现有陌生人长期停留"
-                self.log.save(img1, 1)  # 保存图片，写入日志
-                self.ErrorText.appendPlainText(logtext)  # 插入窗口日志
-
-            elif time.time() - detecttime > 180 and count < 5:  # 无人或正常人经过 记录清空
-                count = 0
-                detecttime = 0
+    def detect(self):
+        print(2)
+        if self.runflag and len(os.listdir(self.photo_path)) == 1:
+            imagePath = os.path.join(self.photo_path, r'1.jpg')
+            print(imagePath)
+            img1 = cv2.imread(imagePath)
+            self.NormalFace.setPixmap(QPixmap(imagePath).scaled(self.NormalFace.width(), self.NormalFace.height()))
+            QtWidgets.QApplication.processEvents()
+            isperson = self.facerec.isPerson(img1)
+            print(isperson)
+            if isperson:
+                flag, img2 = self.facerec.isHost(img1)  # flag为真表示是主人
+                print(flag)
+                height, width, bytesPerComponent = img2.shape
+                bytesPerLine = bytesPerComponent * width
+                show = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)  # 视频色彩转换回RGB，这样才是现实的颜色
+                showImage = QImage(show.data, width, height, bytesPerLine, QImage.Format_RGB888)  # 把读取到的视频数据变成QImage形式
+                self.ErrorFace.setPixmap(
+                    QPixmap.fromImage(showImage).scaled(self.ErrorFace.width(), self.ErrorFace.height()))
+                QtWidgets.QApplication.processEvents()
+                if not flag:
+                    if not self.detecttime == 0:  # 起始时间未记录则记录开始检测到人脸的时间
+                        self.detecttime = time.time()
+                    self.count += 1
+                if time.time() - self.detecttime > 20 and self.count > 20:  # 停留时间超过2分钟 识别次数超过20次 记录为异常
+                    # 调用文件处理 存储异常图片 返回文件路径
+                    # 调用文件处理 返回要记录的日志文本 同时在外部log文件追加内容
+                    self.count = 0
+                    self.detecttime = 0
+                    wrongImagePath = 1  # 储存的异常图片路径 待完善
+                    logtext = '1'  # 要插入的日志文本内容 待完善
+                    self.ErrorText.appendPlainText(logtext)  # 插入日志
+                elif time.time() - self.detecttime > 180 and self.count < 5:  # 无人或正常人经过 记录清空
+                    self.count = 0
+                    self.detecttime = 0
+            os.remove(imagePath)
+            time.sleep(0.1)
 
     def stop(self):
         replay = QMessageBox.question(self, "", "确认停止嘛", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if replay == QMessageBox.Yes:
-            self.ssh.stopFace()
             self.timer.stop()
+            self.runflag = False
+            self.ssh.stopFace()
             self.NormalFace.clear()
-            self.ErrorFace.clear()
+            time.sleep(0.1)
             self.ssh.clear()  # 清空文件夹
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)

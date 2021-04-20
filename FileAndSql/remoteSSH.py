@@ -9,6 +9,7 @@
 # -*- 功能说明 -*-
 
 # 通过ssh协议，利用paramiko库进行对树莓派的远程命令控制
+# 正常连接返回1 错误连接返回0
 
 # -*- 功能说明 -*-
 import paramiko
@@ -28,7 +29,10 @@ class SSH:
 
     def run(self, command):
         # 建立连接
-        self.ssh.connect(self.ip, self.port, self.user, self.password, timeout=10)
+        try:
+            self.ssh.connect(self.ip, self.port, self.user, self.password, timeout=10)
+        except:
+            return 0
         stdin, stdout, stderr = self.ssh.exec_command('cd /home/pi/code' + ';' + command)
         # err_list = stderr.readlines()
         # if len(err_list) > 0:
@@ -39,6 +43,7 @@ class SSH:
         #     print(item)
         # # 关闭连接
         self.ssh.close()
+        return 1
 
     def startFace(self):
         self.run('sudo sh runFace.sh')

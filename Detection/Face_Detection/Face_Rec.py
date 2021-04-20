@@ -8,8 +8,7 @@
 
 '''# -*- 功能说明 -*-
 
-调用此类后 根据传入的图片地址与yml训练数据进行识别 返回正常 异常情况判断
-俩个函数 一个判断是否是人 一个判断是否与yml符合 如不符合 调用文件类 进行储存 再返回结果与路径
+调用此类后 根据传入的图片与yml训练数据进行识别 
 
 '''  # -*- 功能说明 -*-
 
@@ -39,22 +38,6 @@ class Face_Rec:
         self.cvo.load(
             os.path.join(self.person_source_path, 'haarcascade_frontalface_alt.xml'))
 
-    def isPerson(self, img):
-        try:
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        except:
-            print('error')
-            return 0
-        faces = self.cvo.detectMultiScale(
-            gray,
-            scaleFactor=1.1,
-            minNeighbors=3,
-        )
-        if faces == ():  # 人脸坐标为空 即未检测到有人的存在
-            return 0
-        else:
-            return 1
-
     def isHost(self, img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = self.cvo.detectMultiScale(
@@ -63,21 +46,24 @@ class Face_Rec:
             minNeighbors=3,
             flags=cv2.CASCADE_SCALE_IMAGE
         )
-        for (x, y, w, h) in faces:
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
-            idnum, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])  # 生成预测id与置信度 对于LBPH 置信度应低于50
-            if confidence <= 100:
-                id = "Host"
-                confidence = "{0}%".format(round(100 - confidence))
-            else:
-                id = "Stranger"
-                confidence = "{0}%".format(round(100 - confidence))
-            cv2.putText(img, str(id), (x + 5, y - 5), self.font, 1, (0, 0, 255), 3)
-            cv2.putText(img, str(confidence), (x + 5, y + h - 5), self.font, 1, (0, 0, 255), 3)
-            if id == "Stranger":
-                return False, img
-            else:
-                return True, img
+        if faces == ():  # 人脸坐标为空 即未检测到有人的存在
+            return False, False, img
+        else:
+            for (x, y, w, h) in faces:
+                cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 3)
+                idnum, confidence = self.recognizer.predict(gray[y:y + h, x:x + w])  # 生成预测id与置信度 对于LBPH 置信度应低于50
+                if confidence <= 100:
+                    id = "Host"
+                    confidence = "{0}%".format(round(100 - confidence))
+                else:
+                    id = "Stranger"
+                    confidence = "{0}%".format(round(100 - confidence))
+                cv2.putText(img, str(id), (x + 5, y - 5), self.font, 1, (0, 0, 255), 3)
+                cv2.putText(img, str(confidence), (x + 5, y + h - 5), self.font, 1, (0, 0, 255), 3)
+                if id == "Stranger":
+                    return 1, False, img
+                else:
+                    return 1, True, img
 
 
 if __name__ == "__main__":

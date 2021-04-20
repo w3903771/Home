@@ -31,7 +31,6 @@ class Ui_mainWindow(object):
         self.ssh = SSH()
         self.ssh.stopFace()
         self.ssh.stopOther()
-        time.sleep(1)
         self.ssh.clear()
 
     def setupUi(self, mainWindow):
