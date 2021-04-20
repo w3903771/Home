@@ -27,10 +27,16 @@ class fileAndLog:
 
     def save(self, img, flag):
         if flag == 1:
-            t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            image_path = os.path.join(self.errors_path, t)
-            test_path = os.path.join(self.errors_path, "errorlog.txt")
-            print(image_path)
-            # cv2.imwrite(image_path,img)
+            # t = time.strftime(r"%Y年%m月%d日 %H时%M分%S秒",)
+            t = time.strftime('%Y{y}%m{m}%d{d} %H{h}%M{mm}%S{s}').format(y='年', m='月', d='日', h='时', mm='分', s='秒')
+            image_path = os.path.join(self.errors_path, "%s 检测到陌生人.jpg" % (t))
+            cv2.imencode('.jpg', img)[1].tofile(image_path)
+            test_path = self.errors_path + "\errorlog.txt"
+
             f = open(test_path, "a")
-            f.write(t + " 图像检测发现有陌生人长期停留")
+            f.write(t + " 图像检测发现有陌生人长期停留\n")
+
+
+if __name__ == '__main__':
+    a = fileAndLog()
+    a.save(1, 1)
