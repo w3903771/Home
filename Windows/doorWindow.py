@@ -177,11 +177,7 @@ class Ui_doorWindow(object):
         self.retranslateUi(doorWindow)
         QtCore.QMetaObject.connectSlotsByName(doorWindow)
 
-        # 设置按钮响应
-        self.startButton.clicked.connect(self.start)
-        self.stopButton.clicked.connect(self.stop)
-        self.Button_OpenPhoto.clicked.connect(self.open)
-        self.registButton.clicked.connect(self.collect)
+
 
     def retranslateUi(self, doorWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -223,6 +219,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_doorWindow):  # 继承qtdesiner的Min
         self.errors_path = os.path.join(
             self.source_path, "Errors")  # 获取依赖数据路径
         self.imagePath = os.path.join(self.photo_path, r'1.jpg')
+
+        # 设置按钮响应
+        self.startButton.clicked.connect(self.start)
+        self.stopButton.clicked.connect(self.stop)
+        self.Button_OpenPhoto.clicked.connect(self.open)
+        self.registButton.clicked.connect(self.collect)
 
         self.thread = QThread()
         self.myThread = MyThread()
@@ -315,5 +317,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_doorWindow):  # 继承qtdesiner的Min
 class doorWindow(QMainWindow):
     def __init__(self):
         QDialog.__init__(self)
+        super().__init__()
         self.child = MainWindow()
         self.child.setupUi(self)
