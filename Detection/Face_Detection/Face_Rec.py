@@ -32,8 +32,6 @@ class Face_Rec:
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
         self.recognizer.read(self.train_path)
-        # recognizer = cv2.face.EigenFaceRecognizer_create()
-        # recognizer = cv2.face.FisherFaceRecognizer_create()
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
         self.cvo.load(
             os.path.join(self.person_source_path, 'haarcascade_frontalface_alt.xml'))
@@ -59,7 +57,7 @@ class Face_Rec:
                     id = "Stranger"
                     confidence = "{0}%".format(round(100 - confidence))
                 cv2.putText(img, str(id), (x + 5, y - 5), self.font, 1, (0, 0, 255), 3)
-                cv2.putText(img, str(confidence), (x + 5, y + h - 5), self.font, 1, (0, 0, 255), 3)
+                # cv2.putText(img, str(confidence), (x + 5, y + h - 5), self.font, 1, (0, 0, 255), 3)
                 if id == "Stranger":
                     return 1, False, img
                 else:

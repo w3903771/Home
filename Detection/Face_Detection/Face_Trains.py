@@ -40,8 +40,6 @@ class Face_Trains():
 
         # 人脸数据路径
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
-        # recognizer = cv2.face.EigenFaceRecognizer_create()
-        # recognizer = cv2.face.FisherFaceRecognizer_create()
         self.cvo = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
         self.cvo.load(
             os.path.join(self.source_path, 'haarcascade_frontalface_alt.xml'))

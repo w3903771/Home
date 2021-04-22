@@ -69,9 +69,11 @@ class Fire_Recognition:
             [x, y, w, h] = member
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        cv2.imshow("erzhi", image)
-        cv2.imshow("fire", image_fire)
-        if len(bounding_boxs) >= 1:
-            return True, image_fire
+        # cv2.imshow("erzhi", image) #有框的原图
+        # cv2.imshow("fire", image_fire) #黑白图
+        # cv2.waitKey(1)
+        print(len(bounding_boxs))
+        if len(bounding_boxs) >= 16:
+            return True, image
         else:
-            return False, image_fire
+            return False, image

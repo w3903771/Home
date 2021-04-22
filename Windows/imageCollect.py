@@ -108,7 +108,7 @@ class Ui_imageCollect(object):
                     cv2.imwrite(path, new_frame)
             if (cv2.waitKey(1) & 0xFF) == ord('q'):
                 break
-            if self.count >= 150:  # 得到30个样本后退出摄像
+            if self.count >= 100:  # 得到30个样本后退出摄像
                 self.label.clear()
                 self.startButton.setEnabled(False)
                 self.startButton.setText("采集完毕...训练中")
